@@ -17,11 +17,13 @@ io.on('connection', (socket) => {
 
 app.set('io', io);
 
-connectDB().then(() => {
-  require('./src/jobs/cron'); // start scheduled jobs
-  server.listen(PORT, () => {
-    console.log(`\n  Internship Tracker API`);
-    console.log(`  Server  → http://localhost:${PORT}`);
-    console.log(`  Health  → http://localhost:${PORT}/api/v1/health\n`);
-  });
+// Start server first so Render health check passes, then connect DB
+server.listen(PORT, () => {
+  console.log(`\n  Internship Tracker API`);
+  console.log(`  Server  → http://localhost:${PORT}`);
+  console.log(`  Health  → http://localhost:${PORT}/api/v1/health\n`);
 });
+
+connectDB().then(() => {
+  require('./src/jobs/cron'); // start scheduled jobs after DB ready
+}).catch(() => {});

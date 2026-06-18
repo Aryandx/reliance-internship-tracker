@@ -1,18 +1,25 @@
 const mongoose = require('mongoose');
 
 const connectDB = async () => {
-  const maxRetries = 10;
-  for (let i = 1; i <= maxRetries; i++) {
-    try {
-      const conn = await mongoose.connect(process.env.MONGODB_URI);
-      console.log(`MongoDB connected: ${conn.connection.host} → ${conn.connection.name}`);
-      return;
-    } catch (err) {
-      console.error(`MongoDB attempt ${i}/${maxRetries} failed: ${err.message}`);
-      if (i === maxRetries) { process.exit(1); }
-      await new Promise(r => setTimeout(r, 3000));
-    }
+  const uri = process.env.MONGODB_URI;
+  if (!uri) {
+    console.error('FATAL: MONGODB_URI environment variable is not set');
+    process.exit(1);
   }
+
+  const tryConnect = async (attempt = 1) => {
+    try {
+      const conn = await mongoose.connect(uri);
+      console.log(`MongoDB connected: ${conn.connection.host} → ${conn.connection.name}`);
+    } catch (err) {
+      console.error(`MongoDB attempt ${attempt} failed: ${err.message}`);
+      const delay = Math.min(attempt * 3000, 30000);
+      console.log(`Retrying in ${delay / 1000}s...`);
+      setTimeout(() => tryConnect(attempt + 1), delay);
+    }
+  };
+
+  await tryConnect();
 };
 
 module.exports = connectDB;
