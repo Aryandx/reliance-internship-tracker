@@ -25,10 +25,16 @@
     @apply bg-white rounded-xl shadow-sm border border-gray-100;
   }
   .card-header {
-    @apply px-6 py-4 border-b border-gray-100;
+    @apply px-4 py-3 md:px-6 md:py-4 border-b border-gray-100;
   }
   .stat-card {
-    @apply card p-6;
+    @apply card p-4 md:p-6;
+  }
+  .table-scroll {
+    @apply overflow-x-auto -mx-4 md:mx-0;
+  }
+  .table-scroll table {
+    @apply min-w-full;
   }
   .btn {
     @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold

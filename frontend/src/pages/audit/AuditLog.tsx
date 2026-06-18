@@ -100,7 +100,7 @@ export default function AuditLog() {
 
               {expanded === log._id && (
                 <div className="px-5 py-4 bg-gray-50 border-t border-gray-100">
-                  <div className="grid grid-cols-2 gap-4 text-xs">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                     {log.before && (
                       <div>
                         <p className="font-semibold text-gray-500 mb-1">Before</p>

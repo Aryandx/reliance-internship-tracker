@@ -29,23 +29,23 @@ export default function HRDashboard() {
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">HR Dashboard</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-900">HR Dashboard</h1>
           <p className="text-sm text-gray-500">{format(new Date(), 'EEEE, d MMMM yyyy')}</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-shrink-0">
           <button onClick={() => navigate('/audit')} className="btn-outline">
-            <ShieldCheck size={16} /> Audit Log
+            <ShieldCheck size={16} /> <span className="hidden sm:inline">Audit Log</span>
           </button>
           <button onClick={() => navigate(ROUTES.WORKSPACE.STANDARD.CREATE_INTERN)} className="btn-primary">
-            <UserPlus size={16} /> Create Intern
+            <UserPlus size={16} /> <span className="hidden sm:inline">Create Intern</span>
           </button>
         </div>
       </div>
 
       {/* Hero */}
-      <div className="rounded-2xl bg-gradient-to-r from-reliance-blue to-blue-600 text-white p-6 shadow-lg flex gap-8 flex-wrap">
+      <div className="rounded-2xl bg-gradient-to-r from-reliance-blue to-blue-600 text-white p-4 md:p-6 shadow-lg flex gap-4 md:gap-8 flex-wrap">
         {[
           { label: 'Total Interns', value: d.total ?? 0 },
           { label: 'Active', value: d.active ?? 0 },
@@ -92,7 +92,8 @@ export default function HRDashboard() {
               className="text-reliance-blue font-medium hover:underline">Create one</button>
           </div>
         ) : (
-          <table className="w-full text-sm">
+          <div className="overflow-x-auto">
+          <table className="w-full text-sm min-w-[600px]">
             <thead>
               <tr className="bg-gray-50 text-xs text-gray-500 uppercase tracking-wider">
                 <th className="text-left px-5 py-3">Name</th>
@@ -135,6 +136,7 @@ export default function HRDashboard() {
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
     </div>
