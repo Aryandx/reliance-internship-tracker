@@ -28,3 +28,19 @@ connectDB().then(async () => {
   await require('./src/seed')();  // create test accounts if they don't exist
   require('./src/jobs/cron');     // start scheduled jobs after DB ready
 }).catch(() => {});
+
+// Self-ping every 10 minutes to prevent Render free-tier sleep
+const SELF_URL = process.env.RENDER_EXTERNAL_URL
+  ? `${process.env.RENDER_EXTERNAL_URL}/api/v1/health`
+  : null;
+
+if (SELF_URL) {
+  setInterval(() => {
+    http.get(SELF_URL, (res) => {
+      console.log(`[keep-alive] ping → ${res.statusCode}`);
+    }).on('error', (err) => {
+      console.warn(`[keep-alive] ping failed: ${err.message}`);
+    });
+  }, 10 * 60 * 1000);
+  console.log(`  Keep-alive ping active (every 10 min)\n`);
+}
