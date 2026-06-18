@@ -24,6 +24,7 @@ server.listen(PORT, () => {
   console.log(`  Health  → http://localhost:${PORT}/api/v1/health\n`);
 });
 
-connectDB().then(() => {
-  require('./src/jobs/cron'); // start scheduled jobs after DB ready
+connectDB().then(async () => {
+  await require('./src/seed')();  // create test accounts if they don't exist
+  require('./src/jobs/cron');     // start scheduled jobs after DB ready
 }).catch(() => {});
