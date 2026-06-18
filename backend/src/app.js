@@ -15,7 +15,11 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 // Health check — must be before auth middleware
-app.get('/api/v1/health', (_, res) => res.json({ status: 'ok', time: new Date() }));
+app.get('/api/v1/health', (_, res) => {
+  const mongoose = require('mongoose');
+  const dbState = ['disconnected', 'connected', 'connecting', 'disconnecting'];
+  res.json({ status: 'ok', time: new Date(), db: dbState[mongoose.connection.readyState] || 'unknown' });
+});
 app.get('/api/health', (_, res) => res.json({ status: 'ok', time: new Date() })); // backwards compat
 
 // API v1 routes
